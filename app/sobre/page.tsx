@@ -1,18 +1,18 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-interface AboutData {
+interface SobreData {
     title: string;
     content: string;
 }
 
 export default function Sobre(){
-    const [data, setData] = useState<AboutData | null>(null);
+    const [data, setData] = useState<SobreData | null>(null);
 
     useEffect(() => {
-        fetch('api/about')
+        fetch('api/sobre')
         .then(response => response.json())
-        .then((data: AboutData) => setData(data));
+        .then((data: SobreData) => setData(data));
     }, []);
 
     if(!data) return <div>Carregando...</div>;

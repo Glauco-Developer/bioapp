@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export default function AboutDashboard() {
+export default function SobreDashboard() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [message, setMessage] = useState("");
@@ -9,24 +9,24 @@ export default function AboutDashboard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await fetch('/api/about', {
+    const response = await fetch('/api/sobre', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, content })
     });
 
     if (response.ok) {
-      setMessage("About atualizado com sucesso!");
+      setMessage("Sobre atualizado com sucesso!");
       setTitle("");
       setContent("");
     } else {
-      setMessage("Erro ao atualizar About.");
+      setMessage("Erro ao atualizar Sobre.");
     }
   };
 
   return (
     <div>
-      <h1>Dashboard - About</h1>
+      <h1>Dashboard - Sobre</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Título:</label>

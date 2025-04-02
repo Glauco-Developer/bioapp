@@ -4,14 +4,14 @@ import Link from "next/link";
 export default function Header() {
   return (
     <header className="w-full border-b bg-white">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-6 py-0 flex items-center justify-between">
         <div className="text-lg font-bold">
           <Link href="/">
             <Image
                className="dark:invert"
                src="/images/logo.webp"
                alt="Logo"
-               width={180}
+               width={150}
                height={38}
                priority
             />
