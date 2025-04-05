@@ -1,37 +1,20 @@
 import { db } from "@/lib/db";
+import { HomePageData, TileData } from '@/types/global';
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const [rows] = await db.query("SELECT * FROM home LIMIT 1");
+    const [homeRows] = await db.query("SELECT * FROM home LIMIT 1");
+    const home = (homeRows as HomePageData[])[0];
 
-    if (!Array.isArray(rows) || rows.length === 0) {
+    if (!home) {
       return NextResponse.json({ error: "Nenhum dado encontrado." }, { status: 404 });
     }
 
-    return NextResponse.json(rows[0]);
-  } catch (error) {
-    console.error("Erro ao conectar com o banco de dados:", error);
-    return NextResponse.json({ error: "Erro ao conectar com o banco de dados." }, { status: 500 });
-  }
-}
+    const [tileRows] = await db.query("SELECT * FROM tiles WHERE pagina_id = ?", [home.id]);
+    const tiles = tileRows as TileData[];
 
-export async function POST(request: Request) {
-  try {
-    const { title, content } = await request.json();
-
-    if (!title || !content) {
-      return NextResponse.json({ error: "Título e conteúdo são obrigatórios." }, { status: 400 });
-    }
-
-    await db.query(
-      `INSERT INTO home (id, title, content)
-       VALUES (1, ?, ?)
-       ON DUPLICATE KEY UPDATE title = ?, content = ?`,
-      [title, content, title, content]
-    );
-
-    return NextResponse.json({ message: "Home atualizado com sucesso!" });
+    return NextResponse.json({ home, tiles });
   } catch (error) {
     console.error("Erro ao conectar com o banco de dados:", error);
     return NextResponse.json({ error: "Erro ao conectar com o banco de dados." }, { status: 500 });

@@ -1,45 +1,41 @@
 'use client';
+import { HomePageData, TileData } from '@/types/global';
 import { useEffect, useState } from 'react';
-import Hero from '../components/Hero';
-import Tile from '../components/Tile'
+import Tile from '@/components/Tile';
+import Hero from '@/components/Hero';
 
-interface HomeDados {
-  slug: string;
-  url: string;
-  imagem_hero_01: string;
-  alt_imagem_hero_01: string;
-  imagem_hero_02: string;
-  alt_imagem_hero_02: string;
-  imagem_hero_03: string;
-  alt_imagem_hero_03: string;
-  imagem_conteudo_01: string;
-  alt_imagem_conteudo_01: string;
-  titulo_conteudo: string;
-  subtitulo_conteudo: string;
-  texto_conteudo: string;
-  atualizado_em: string;
-  criado_em: string;
-  id: number;
-}
 
 export default function Home() {
-  const [dados, setDados] = useState<HomeDados | null>(null);
+  const [pageData, setData] = useState<HomePageData | null>(null);
+  const [tiles, setTiles] = useState<TileData[] | null>(null);
 
   useEffect(() => {
-      fetch('api/home')
-      .then(response => response.json())
-      .then((dados: HomeDados) => setDados(dados));
-  }, []);
-
-  if(!dados) return <div>Carregando...</div>;
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/home');
+        const data = await response.json();
+        setData(data.home);
+        setTiles(data.tiles);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, [])
 
   return (
-    <div>
-      Dados
-      {dados.slug}
-      {dados.criado_em}
-        <Hero dados={dados} />
-        <Tile />
-    </div>
+    <main>
+      {!pageData ? 
+        <div>Carregando</div> :
+        <div>
+          <h1>Título: {pageData.titulo}</h1>
+          <h2>Criado em: {new Date(pageData.criado_em).toLocaleDateString()}</h2>
+        </div>
+      }
+      {/* <Hero data={pageData}></Hero> */}
+      {!tiles ?
+        <div>Carregando</div> :
+        tiles.map((tile: TileData) => <Tile key={tile.id} data={tile}></Tile>)}
+    </main>
   );
 }
