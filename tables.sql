@@ -1,22 +1,17 @@
--- Tabela principal de páginas
-CREATE TABLE pages (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    slug VARCHAR(255) UNIQUE NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    image TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+CREATE TABLE paginas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  titulo VARCHAR(255),
+  descricao TEXT,
+  imagem TEXT,
+  criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+  atualizado_em DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Tabela de componentes
-CREATE TABLE components (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    page_id INT NOT NULL,
-    type VARCHAR(50) NOT NULL,
-    content JSON NOT NULL,
-    position INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (page_id) REFERENCES pages(id) ON DELETE CASCADE
+INSERT INTO paginas (slug, titulo, descricao, imagem)
+VALUES (
+  'home',
+  'Bem-vindo à página inicial!',
+  'Essa é a descrição simples da home.',
+  '/img/banner.jpg'
 );
